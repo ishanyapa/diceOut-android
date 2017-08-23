@@ -30,12 +30,42 @@
         android:id="@+id/rollButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rollResult"
+        android:layout_below="@+id/die2Image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:text="ROLL!"
         android:onClick="rollDice"
         tools:layout_editor_absoluteX="146dp"
         tools:layout_editor_absoluteY="33dp" />
+    
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/die1Image"
+        android:layout_below="@id/rollResult"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/die_1"
+        />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/die2Image"
+        android:layout_below="@id/rollResult"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/die_1"
+        />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/die3Image"
+        android:layout_below="@id/rollResult"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/die_1"
+        />
 
 </android.widget.RelativeLayout>
