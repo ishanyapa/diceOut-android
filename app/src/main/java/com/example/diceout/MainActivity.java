@@ -24,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
     // Field to hold the result text
     TextView rollResult;
 
-    // Field to hold the roll button
-    Button rollButton;
-
     // Field to hold the score
     int score;
 
@@ -53,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener(){
+
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View view){
+                rollDice(view);
             }
         });
 
@@ -69,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Link instances to widgets in the activity view
         rollResult = (TextView) findViewById(R.id.rollResult);
-        rollButton = (Button) findViewById(R.id.rollButton);
         scoreText = (TextView) findViewById(R.id.scoreText);
 
         // Initialize the random number generator
