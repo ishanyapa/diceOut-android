@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     // ArrayList to hold all three dice images
     ArrayList<ImageView> diceImageViews;
 
+    // Field to hold the score text
+    TextView scoreText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         // Link instances to widgets in the activity view
         rollResult = (TextView) findViewById(R.id.rollResult);
         rollButton = (Button) findViewById(R.id.rollButton);
+        scoreText = (TextView) findViewById(R.id.scoreText);
 
         // Initialize the random number generator
         rand = new Random();
@@ -110,11 +114,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Build message with the result
-        String msg = "You rolled a " + die1 + ", a " + die2 + ", and a " + die3;
+        String msg;
+
+        if(die1 == die2 && die1 == die3) {
+            // Triples
+            int scoreDelta = die1 * 100;
+            msg = "You rolled a triple " + die1 + "! You score " + scoreDelta + " points!";
+            score += scoreDelta;
+        } else if (die1 == die2 || die1 == die3 || die2 == die3 ) {
+            // Doubles
+            msg = "You rolled doubles for 50 points!";
+            score += 50;
+        } else {
+            msg = "You didn't score this roll. Try again!";
+        }
 
         //Update the app with the result message
         rollResult.setText(msg);
-
+        scoreText.setText("Score : " + score);
     }
 
     @Override
