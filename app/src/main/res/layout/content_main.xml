@@ -64,10 +64,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="250dp"
         android:text="Score : 0"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/attemptText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:text="You have 3 attempts left"
+        android:textColor="@android:color/holo_red_dark"/>
 
 </android.widget.RelativeLayout>
