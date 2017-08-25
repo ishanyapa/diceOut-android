@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     // Field to hold the score text
     TextView scoreText;
 
+    // Filed to hold the number of attempts left
+    TextView attemptText;
+
     // Filed to hold number of tosses with 0 score
     int tosses;
 
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         score = 0;
 
         // Set initial tosses
-        tosses = 0;
+        tosses = 3;
 
         // Create greeting
         Toast.makeText(getApplicationContext(),"Welcome to DiceOut!",Toast.LENGTH_SHORT).show();
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         // Link instances to widgets in the activity view
         rollResult = (TextView) findViewById(R.id.rollResult);
         scoreText = (TextView) findViewById(R.id.scoreText);
+        attemptText = (TextView) findViewById(R.id.attemptText);
 
         // Initialize the random number generator
         rand = new Random();
@@ -107,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         dice.add(die2);
         dice.add(die3);
 
-        if (tosses != 3) {
+        if (tosses > 0) {
             for (int dieOfSet = 0; dieOfSet < 3; dieOfSet++){
                 String imageName = "die_" + dice.get(dieOfSet) + ".png";
                 try {
@@ -133,40 +137,47 @@ public class MainActivity extends AppCompatActivity {
                 score += 50;
             } else {
                 msg = "You didn't score this roll. Try again!";
-                tosses++;
+                tosses--;
+                attemptText.setText("You have " + tosses + " attempts left");
+
+                if (tosses == 0) {
+                    gameOver();
+                }
             }
 
-            //Update the app with the result message
+            // Update the app with the result message
             rollResult.setText(msg);
             scoreText.setText("Score : " + score);
 
         } else {
-            rollResult.setText("GAME OVER!");
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("You scored " + score)
-                    .setTitle("GAME OVER");
-
-            builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    Intent i = getBaseContext().getPackageManager()
-                            .getLaunchIntentForPackage( getBaseContext().getPackageName() );
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                }
-            });
-            builder.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    finish();
-                    System.exit(0);
-                }
-            });
-
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            gameOver();
         }
 
+    }
 
+    public void gameOver(){
+        rollResult.setText("GAME OVER!");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You scored " + score)
+                .setTitle("GAME OVER");
+
+        builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+        });
+        builder.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+                System.exit(0);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
