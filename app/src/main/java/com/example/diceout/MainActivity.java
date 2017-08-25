@@ -1,9 +1,12 @@
 package com.example.diceout;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -42,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     // Field to hold the score text
     TextView scoreText;
 
+    // Filed to hold number of tosses with 0 score
+    int tosses;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Set initial score
         score = 0;
+
+        // Set initial tosses
+        tosses = 0;
 
         // Create greeting
         Toast.makeText(getApplicationContext(),"Welcome to DiceOut!",Toast.LENGTH_SHORT).show();
@@ -98,36 +107,66 @@ public class MainActivity extends AppCompatActivity {
         dice.add(die2);
         dice.add(die3);
 
-        for (int dieOfSet = 0; dieOfSet < 3; dieOfSet++){
-            String imageName = "die_" + dice.get(dieOfSet) + ".png";
-            try {
-                InputStream stream = getAssets().open(imageName);
-                Drawable d = Drawable.createFromStream(stream,null);
-                diceImageViews.get(dieOfSet).setImageDrawable(d);
-            } catch (IOException e){
-                e.printStackTrace();
+        if (tosses != 3) {
+            for (int dieOfSet = 0; dieOfSet < 3; dieOfSet++){
+                String imageName = "die_" + dice.get(dieOfSet) + ".png";
+                try {
+                    InputStream stream = getAssets().open(imageName);
+                    Drawable d = Drawable.createFromStream(stream,null);
+                    diceImageViews.get(dieOfSet).setImageDrawable(d);
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
             }
-        }
 
-        // Build message with the result
-        String msg;
+            // Build message with the result
+            String msg;
 
-        if(die1 == die2 && die1 == die3) {
-            // Triples
-            int scoreDelta = die1 * 100;
-            msg = "You rolled a triple " + die1 + "! You score " + scoreDelta + " points!";
-            score += scoreDelta;
-        } else if (die1 == die2 || die1 == die3 || die2 == die3 ) {
-            // Doubles
-            msg = "You rolled doubles for 50 points!";
-            score += 50;
+            if (die1 == die2 && die1 == die3) {
+                // Triples
+                int scoreDelta = die1 * 100;
+                msg = "You rolled a triple " + die1 + "! You score " + scoreDelta + " points!";
+                score += scoreDelta;
+            } else if (die1 == die2 || die1 == die3 || die2 == die3 ) {
+                // Doubles
+                msg = "You rolled doubles for 50 points!";
+                score += 50;
+            } else {
+                msg = "You didn't score this roll. Try again!";
+                tosses++;
+            }
+
+            //Update the app with the result message
+            rollResult.setText(msg);
+            scoreText.setText("Score : " + score);
+
         } else {
-            msg = "You didn't score this roll. Try again!";
+            rollResult.setText("GAME OVER!");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You scored " + score)
+                    .setTitle("GAME OVER");
+
+            builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Intent i = getBaseContext().getPackageManager()
+                            .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
+            });
+            builder.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    finish();
+                    System.exit(0);
+                }
+            });
+
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
 
-        //Update the app with the result message
-        rollResult.setText(msg);
-        scoreText.setText("Score : " + score);
+
     }
 
     @Override
